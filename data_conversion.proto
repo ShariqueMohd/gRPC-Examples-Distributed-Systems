@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.data_conversion";
+option java_outer_classname = "DataConversionProto";
+option objc_class_prefix = "DTC";
+
+package dataconversion;
+
+service DataConversion {
+	rpc GetConvertedValue(Data) returns (ConvertedValue) { }
+}
+
+
+message Data {
+	string fromType = 1;
+	string toType = 2;
+	float value = 3;
+}
+
+message ConvertedValue {
+	string convUnit = 1;
+	float value = 2;
+}
