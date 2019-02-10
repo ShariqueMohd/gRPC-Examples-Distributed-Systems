@@ -49,7 +49,7 @@ class DataConversionImpl final : public DataConversion::Service {
 		else if(source == "cm") {
 			std::cout << "From cm to ";
 			if(target == "inch") {
-				std::cout << "inch\n";
+				std::cout << "inch\t" << data->value() << "\n";
 				convertedvalue->set_value(data->value() / 2.54);
 			}
 			else if(target == "mm") {
@@ -69,6 +69,20 @@ class DataConversionImpl final : public DataConversion::Service {
 			if(target == "lb") {
 				std::cout << "lb\n";
 				convertedvalue->set_value(data->value() / 0.453);			
+			}		
+		}
+		else if(source == "yard") {
+			std::cout << "From yard to ";
+			if(target == "feet") {
+				std::cout << "lb\n";
+				convertedvalue->set_value(data->value() * 3.0);			
+			}		
+		}
+		else if(source == "feet") {
+			std::cout << "From feet to ";
+			if(target == "yard") {
+				std::cout << "yard\n";
+				convertedvalue->set_value(data->value() / 3.0);			
 			}		
 		}
 		return Status::OK;
