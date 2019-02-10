@@ -22,24 +22,12 @@ using dataconversion::DataConversion;
 class DataConversionClient {
 
 public:
-  DataConversionClient(std::shared_ptr<Channel> channel) : stub_(DataConversion::NewStub(channel)) { 
-	Data inchTocm;
-	inchTocm.set_fromtype("inch"); inchTocm.set_totype("cm"); inchTocm.set_value(1.0); data_list_.push_back(inchTocm);
+  DataConversionClient(std::shared_ptr<Channel> channel) : stub_(DataConversion::NewStub(channel)) { }
 
-	Data inchTomm;
-	inchTomm.set_fromtype("inch"); inchTomm.set_totype("mm"); inchTomm.set_value(1.0); data_list_.push_back(inchTomm);
-
-	Data cmToinch;
-	cmToinch.set_fromtype("cm"); cmToinch.set_totype("inch"); cmToinch.set_value(1.0); data_list_.push_back(cmToinch);
-
-	Data cmTomm;
-	cmTomm.set_fromtype("cm"); cmTomm.set_totype("mm"); cmTomm.set_value(1.0); data_list_.push_back(cmTomm);
-
-	Data lbTokg;
-	lbTokg.set_fromtype("lb"); lbTokg.set_totype("kg"); lbTokg.set_value(1.0); data_list_.push_back(lbTokg);
-
-	Data kgTolb;
-	kgTolb.set_fromtype("kg"); kgTolb.set_totype("lb"); kgTolb.set_value(1.0); data_list_.push_back(kgTolb);
+  void Push_Data(std::string FT, std::string TT, float value) {
+	Data inpData;
+	inpData.set_fromtype(FT); inpData.set_totype(TT); inpData.set_value(value); 
+	data_list_.push_back(inpData);
   }
 
   void GetConvertedValue() {
@@ -71,6 +59,19 @@ int main(int argc, char** argv) {
 	DataConversionClient guide(grpc::CreateChannel("localhost:50051",
                           grpc::InsecureChannelCredentials()));
 	
+	std::ifstream inFile("data.txt");
+	
+	// Assuming we have correct data.
+	std::cout << "Entered\n";
+	std::string ft, temp, tt, strValue; 
+	float value;		
+	
+	while(inFile >> ft >> temp >> tt >> strValue) {
+		value = std::stof(strValue);	
+		guide.Push_Data(ft, tt, value);
+	}
+	
+	inFile.close();	
 	std::cout << "Get converted value\n";	
 	guide.GetConvertedValue();
 }
